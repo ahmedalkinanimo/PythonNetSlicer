@@ -1,4 +1,4 @@
-
+from IPAddress import *
 '''
 The primary aim of this project is to develop an application that can subnet a 
 given IPv4 address using three different subnetting methods. Additionally, the 
@@ -12,5 +12,10 @@ Strategic Pattern Design will be utilized in this project.
 '''
 
 if __name__ == "__main__":
-    print("NetSlicer")
-    
+    valid=False
+    while not valid:
+        inputIp=input("Enter an IP address: ")
+        if IPAddress.validateIp(inputIp):
+            valid=True
+    IP=IPAddress(inputIp)
+    print(IP)
