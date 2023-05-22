@@ -10,7 +10,7 @@ PythonNetSlicer
         tempStr= ""
         for i in range(4):
             self._netIpOctet[i]=self._enteredIp.get_IpOctets()[i] & self._enteredIp.get_subnetMaskOctets()[i]
-            self._netIp+=str(this.netIpOctet[i])+"." if i!=3 else str(this.netIpOctet[i])
+            self._netIp+=str(self.netIpOctet[i])+"." if i!=3 else str(self.netIpOctet[i])
    
    def __str__(self)->str:
         return "Net IP: "+self._netIp+"/"+self._netPrefix+"\n1st IP address: "+self._firstIpAddress+"\nlast IP address: "+self._lastIpAddress+"\n Broad Cast IP                   address: "+self._broadCastIpAddress+"\n # usable IP addresses: "+self._numberOfHosts 
@@ -21,5 +21,14 @@ PythonNetSlicer
         
        def set_first_IpAddress():
         for i in range(4):
-            self._firstIpAddress+=str(this.netIpOctet[i])+"." if i!=3 else str(this.netIpOctet[i]+1)
+            self._firstIpAddress+=str(self.netIpOctet[i])+"." if i!=3 else str(self.netIpOctet[i]+1)
         
+    def set_last_IpAddress():
+        for i in range(4):
+            self._lastIpAddress+=str((self.netIpOctet[i]) | (~self._netIpOctet[i]+256)+".") if i!=3 else str(((self.netIpOctet[i]) | (~self._netIpOctet[i]+256))-1)
+
+    def set_broadCast_IpAddress():
+        for i in range(4):
+            self._lastIpAddress+=str((self.netIpOctet[i]) | (~self._netIpOctet[i]+256)+".") if i!=3 else str((self.netIpOctet[i]) | (~self._netIpOctet[i]+256))
+            
+            
