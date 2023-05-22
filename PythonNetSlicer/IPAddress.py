@@ -108,10 +108,14 @@ class NetworkIpAddress:
         self._lastIpAddress = ""
         self._broadCastIpAddress = ""
         self._numberOfHosts = 0
+        self._netSubnetMask=[0,0,0,0]
 
         # Set the entered IP
         self.set_entered_Ip(ip)
 
+        # Set the the subnet mask Octets
+        self.set_SubnetMask()
+        
         # Set the network IP, the network Ip Octets & network prefix
         self.set_netIp()
 
@@ -127,12 +131,15 @@ class NetworkIpAddress:
         # Set the number of hosts
         self.set_number_of_hosts()
 
-
+        
     def __str__(self)->str: 
         return "Net IP: "+self._netIp+"/"+str(self._netPrefix)+"\n1st IP address: "+self._firstIpAddress+"\nlast IP address: "+self._lastIpAddress+"\nBroad Cast IP address: "+self._broadCastIpAddress+"\n# usable IP addresses: "+str(self._numberOfHosts)
 
     # getter methods
     def get_entered_Ip(self)-> str:
+        return self._netSubnetMask
+
+    def get_SubnetMask(self)-> str:
         return self._enteredIp
 
     def get_netIp(self)-> str:
@@ -170,19 +177,20 @@ class NetworkIpAddress:
 
     def set_last_IpAddress(self):
         for i in range(4):
-            #x1=self._netIpOctet[i]
-            #x2=-(x1 ^ ((1<<x1.bit_length())-1))+255
-            #self._lastIpAddress+=str(x1 | x2)+"." if i!=3 else str((x1 | x2)-1)
-            pass
+            octet=self._netIpOctet[i]
+            wildCard=255-self._netSubnetMask[i]
+            self._lastIpAddress +=str(octet|wildCard)+"." if i != 3 else str((octet|wildCard)-1)
 
     def set_broadCast_IpAddress(self):
         for i in range(4):         
-            #x1 = self._netIpOctet[i]
-            #x2 = 255-x1
-            #self._broadCastIpAddress += str(x1 + x2) + "." if i != 3 else str(x1 + x2)
-            pass
+            octet=self._netIpOctet[i]
+            wildCard=255-self._netSubnetMask[i]
+            self._broadCastIpAddress +=str(octet|wildCard)+"." if i != 3 else str(octet|wildCard)
             
     def set_number_of_hosts(self):
         self._numberOfHosts=int(2**(32-self._netPrefix)-2)
+
+    def set_SubnetMask(self):
+        self._netSubnetMask=self._enteredIp.get_subnetMaskOctets()
      
 #---------------------------------------------------------------------------------------
