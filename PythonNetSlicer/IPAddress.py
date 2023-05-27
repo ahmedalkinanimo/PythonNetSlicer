@@ -79,20 +79,46 @@ class IPAddress:
             step_size -= 8
             self._subnet_mask_str += str(self._subnet_mask[i]) + ("." if i != 3 else "")
 
-    def get_Ip(self)->str:
+    def get_Ip(self) -> str:
+        """
+        Get the IP address.
+        Returns:
+            str: The IP address.
+        """
         return self._ipAddress
-  
-    def get_Prefix(self)->int:
+
+    def get_Prefix(self) -> int:
+        """
+        Get the prefix length.
+        Returns:
+            int: The prefix length.
+        """
         return self._prefix
 
-    def get_IpOctets(self)->list[int]:
+    def get_IpOctets(self) -> list[int]:
+        """
+        Get the IP address octets.
+        Returns:
+            list[int]: The IP address octets as a list.
+        """
         return self._octets
 
-    def get_subnetMaskOctets(self)->list[int]:
+    def get_subnetMaskOctets(self) -> list[int]:
+        """
+        Get the subnet mask octets.
+        Returns:
+            list[int]: The subnet mask octets as a list.
+        """
         return self._subnet_mask
 
-    def get_subnetMaskStr(self)->str:
+    def get_subnetMaskStr(self) -> str:
+        """
+        Get the subnet mask as a string.
+        Returns:
+            str: The subnet mask as a string.
+        """
         return self._subnet_mask_str
+
     
 #------------------------------------------------------------------
 
@@ -132,65 +158,91 @@ class NetworkIpAddress:
         self.set_number_of_hosts()
 
         
-    def __str__(self)->str: 
+    def __str__(self)->str:
+        # Returns a string representation of the network information.
         return "Net IP: "+self._netIp+"/"+str(self._netPrefix)+"\n1st IP address: "+self._firstIpAddress+"\nlast IP address: "+self._lastIpAddress+"\nBroad Cast IP address: "+self._broadCastIpAddress+"\n# usable IP addresses: "+str(self._numberOfHosts)
 
     # getter methods
-    def get_entered_Ip(self)-> str:
-        return self._netSubnetMask
-
-    def get_SubnetMask(self)-> str:
+    def get_entered_Ip(self) -> str:
+        # Returns the entered IP address.
         return self._enteredIp
 
-    def get_netIp(self)-> str:
+    def get_SubnetMask(self) -> str:
+        # Returns the subnet mask.
+        return self._netSubnetMask
+
+    def get_netIp(self) -> str:
+        # Returns the network IP address.
         return self._netIp
 
-    def get_first_IpAddress(self)-> str:
+    def get_first_IpAddress(self) -> str:
+        # Returns the first IP address in the network.
         return self._firstIpAddress
 
-    def get_last_IpAddress(self)-> str:
+    def get_last_IpAddress(self) -> str:
+        # Returns the last IP address in the network.
         return self._lastIpAddress
 
-    def get_broadCast_IpAddress(self)->str:
+    def get_broadCast_IpAddress(self) -> str:
+        # Returns the broadcast IP address of the network.
         return self._broadCastIpAddress
 
-    def get_number_of_hosts(self)-> int:
+    def get_number_of_hosts(self) -> int:
+        # Returns the number of hosts in the network.
         return self._numberOfHosts
 
-    def get_netPrefix(self)-> int:
+    def get_netPrefix(self) -> int:
+        # Returns the network prefix length.
         return self._netPrefix
+
+    def get_netIpOctet(self) -> int:
+        # Returns the octet of the network IP address.
+        return self._netIpOctet
+
 
     # setter methods
     def set_entered_Ip(self, ip: IPAddress):
+        """
+        Set the entered IP address.
+        Args:
+            ip (IPAddress): The entered IP address.
+        """
         self._enteredIp = ip
         
     def set_netIp(self):
+        # Calculate and set the network IP address.
         self._netPrefix = self._enteredIp.get_Prefix()
-        tempStr= ""
+        tempStr = ""
         for i in range(4):
-            self._netIpOctet[i]=self._enteredIp.get_IpOctets()[i] & self._enteredIp.get_subnetMaskOctets()[i]
-            self._netIp+=str(self._netIpOctet[i])+"." if i!=3 else str(self._netIpOctet[i])
+            self._netIpOctet[i] = self._enteredIp.get_IpOctets()[i] & self._enteredIp.get_subnetMaskOctets()[i]
+            self._netIp += str(self._netIpOctet[i]) + "." if i != 3 else str(self._netIpOctet[i])
 
     def set_first_IpAddress(self):
+        # Calculate and set the first IP address in the network.
         for i in range(4):
-            self._firstIpAddress+=str(self._netIpOctet[i])+"." if i!=3 else str(self._netIpOctet[i]+1)
+            self._firstIpAddress += str(self._netIpOctet[i]) + "." if i != 3 else str(self._netIpOctet[i] + 1)
 
     def set_last_IpAddress(self):
+        # Calculate and set the last IP address in the network.
         for i in range(4):
-            octet=self._netIpOctet[i]
-            wildCard=255-self._netSubnetMask[i]
-            self._lastIpAddress +=str(octet|wildCard)+"." if i != 3 else str((octet|wildCard)-1)
+            octet = self._netIpOctet[i]
+            wildCard = 255 - self._netSubnetMask[i]
+            self._lastIpAddress += str(octet | wildCard) + "." if i != 3 else str((octet | wildCard) - 1)
 
     def set_broadCast_IpAddress(self):
+        # Calculate and set the broadcast IP address.
         for i in range(4):         
-            octet=self._netIpOctet[i]
-            wildCard=255-self._netSubnetMask[i]
-            self._broadCastIpAddress +=str(octet|wildCard)+"." if i != 3 else str(octet|wildCard)
+            octet = self._netIpOctet[i]
+            wildCard = 255 - self._netSubnetMask[i]
+            self._broadCastIpAddress += str(octet | wildCard) + "." if i != 3 else str(octet | wildCard)
             
     def set_number_of_hosts(self):
-        self._numberOfHosts=int(2**(32-self._netPrefix)-2)
+        # Calculate and set the number of available hosts.
+        self._numberOfHosts = int(2 ** (32 - self._netPrefix) - 2)
 
     def set_SubnetMask(self):
-        self._netSubnetMask=self._enteredIp.get_subnetMaskOctets()
+        # Set the subnet mask.
+        self._netSubnetMask = self._enteredIp.get_subnetMaskOctets()
+
      
 #---------------------------------------------------------------------------------------
