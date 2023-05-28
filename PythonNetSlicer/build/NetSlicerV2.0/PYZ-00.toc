@@ -1,4 +1,4 @@
-('C:\\PythonProjects\\PythonNetSlicer\\PythonNetSlicer\\build\\NetSlicer\\PYZ-00.pyz',
+('C:\\PythonProjects\\PythonNetSlicer\\PythonNetSlicer\\build\\NetSlicerV2.0\\PYZ-00.pyz',
  [('IPAddress',
    'C:\\PythonProjects\\PythonNetSlicer\\PythonNetSlicer\\IPAddress.py',
    'PYMODULE'),

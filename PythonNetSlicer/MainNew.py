@@ -16,10 +16,19 @@ def screen_holder(word: str):
     # Wait for user input
     input()
 
+def final_results_print(subnets : list[str]):
+    print("Subnet IP address \t 1st IP \t\t  last IP \t\t   Broadcast IP \tusable IPs")
+    print("-------------------------------------------------------------------------------------------------------------")
+    for i in subnets:
+        net = NetworkIpAddress(IPAddress(i))
+        print('{:<25}{:<25}{:<25}{:<21}{:<5}'.format(i,net.get_first_IpAddress(),net.get_last_IpAddress(),net.get_broadCast_IpAddress(),net.get_number_of_hosts()))
+    print("-------------------------------------------------------------------------------------------------------------")
+
+
 if __name__ == "__main__":
     print("Welcome to NetSlicer")
     print("This application performs subnetting on a given IPv4 address using three different subnetting methods. It ensures the input IPv4 address is valid and calculates the corresponding network IPv4 address. For each network, the application determines the first, last, and broadcast IPv4 addresses. Additionally, it computes the number of available usable IP addresses.")
-    print()
+    print("NOTE: use a full screen window for a better view of the printed data\n")
     ip = IPSubnetCalculator.ip_address_input()
     choice1 = 0
     choice2 = 0
@@ -56,8 +65,8 @@ if __name__ == "__main__":
                     print("It's impossible to complete the task with the given information")
                 else:
                     print("Subnet IP addresses:")
-                    for i in subnets:
-                        print(i)
+                    final_results_print(subnets)
+                    
                 screen_holder("continue")
 
                 choice2 = int(input("whould you like to: 1-Enter a new IP address. 2- Use the same IP address. 3-Exit: "))
@@ -79,8 +88,7 @@ if __name__ == "__main__":
                     print("It's impossible to complete the task with the given information")
                 else:
                     print("Subnet IP addresses:")
-                    for i in subnets:
-                        print(i)
+                    final_results_print(subnets)
                         
                 screen_holder("continue")        
                 choice2 = int(input("whould you like to: 1-Enter a new IP address. 2- Use the same IP address. 3-Exit: "))
@@ -102,8 +110,7 @@ if __name__ == "__main__":
                     print("It's impossible to complete the task with the given information")
                 else:
                     print(len(subnets),"subnets can be created:")
-                    for i in subnets:
-                        print(i)
+                    final_results_print(subnets)
                         
                 screen_holder("continue")
                 choice2 = int(input("whould you like to: 1-Enter a new IP address. 2- Use the same IP address. 3-Exit: "))
